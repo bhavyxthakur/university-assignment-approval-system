@@ -1,4 +1,4 @@
-<!-- Student Dashboard View -->
+Student Dashboard View
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,16 +10,16 @@
 <body>
     <%- include('studentNavigation') %>
     <div class="main-with-sidebar">
-        <h1>Welcome, <%= userName %>!</h1>
+        <h1>Welcome!</h1>
         <h2>Your Assignments</h2>
-        <a href="/student/assignments/create" class="btn">Create New Assignment</a>
+        <!-- <a href="/student/assignments/create" class="btn">Create New Assignment</a> -->
         <table class="table">
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Last Updated</th>
-                    <th>Actions</th>
+                    <th>Draft</th>
+                    <th>Submitted</th>
+                    <th>Approved</th>
+                    <th>Rejected</th>
                 </tr>
             </thead>
             <tbody>

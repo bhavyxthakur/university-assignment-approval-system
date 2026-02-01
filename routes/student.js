@@ -37,8 +37,8 @@ const upload = multer({
 // Dashboard
 studentRoute.get("/dashboard", studentController.studentDashboard);
 
-// Assignment creation
-studentRoute.get("/assignments/create", studentController.assignmentCreationGet);
+// Assignment submission
+studentRoute.get("/assignments/submit", studentController.assignmentSubmissionGet);
 studentRoute.post("/assignments/create", studentController.assignmentCreationPost);
 
 // Assignment list and details

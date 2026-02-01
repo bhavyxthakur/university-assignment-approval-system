@@ -49,11 +49,11 @@ module.exports.studentDashboard = async (req, res) => {
 
 // ============= ASSIGNMENT CREATION =============
 
-module.exports.assignmentCreationGet = (req, res) => {
+module.exports.assignmentSubmissionGet = (req, res) => {
     try {
-        res.render("createAssignment", { error: null });
+        res.render("submitAssignment", { error: null });
     } catch (err) {
-        console.error("Assignment creation page error:", err);
+        console.error("Assignment submission page error:", err);
         res.status(500).render('error', { error: "Error loading form" });
     }
 };

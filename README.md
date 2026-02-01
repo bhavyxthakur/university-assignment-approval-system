@@ -521,4 +521,3 @@ npm start      # Production
 4. Admin creates departments, then creates users
 
 ---
-

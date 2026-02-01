@@ -1,0 +1,74 @@
+/* Shared professional styles */
+:root{
+  --bg:#0f1720;
+  --card:#0f1725;
+  --muted:#94a3b8;
+  --accent:#2563eb;
+  --surface:#0b1220;
+  --text:#e6eef6;
+  --border:rgba(255,255,255,0.04);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,var(--bg),#071024);color:var(--text)}
+.container-center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:420px;background:var(--card);border-radius:10px;padding:28px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid var(--border)}
+.card h2{margin:0 0 12px;font-size:20px;color:var(--text);font-weight:600}
+.form-row{margin-top:14px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input[type="text"],input[type="email"],input[type="password"],select,textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);outline:none}
+input:focus,textarea:focus,select:focus{box-shadow:0 0 0 4px rgba(37,99,235,0.12);border-color:var(--accent)}
+/* Override browser autofill (yellow) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text) !important;
+  box-shadow: 0 0 0px 1000px rgba(255,255,255,0.02) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Improve input background for clarity */
+input, textarea, select { background: rgba(255,255,255,0.02); }
+
+/* Card adjustments */
+.card{border-radius:12px;padding:32px;max-width:460px}
+.card h2{font-size:22px;margin-bottom:6px}
+
+/* Primary button polish */
+button.primary{background:linear-gradient(180deg,var(--accent),#1e40af);box-shadow:0 6px 18px rgba(16,24,40,0.6)}
+button.primary:active{transform:translateY(1px)}
+button.primary{width:100%;padding:12px;border-radius:8px;border:none;background:var(--accent);color:white;font-weight:600;cursor:pointer;margin-top:18px}
+a.link{color:var(--accent);text-decoration:none;font-size:13px}
+.error{color:#ff6b6b;text-align:center;margin-bottom:10px}
+/* Sidebar styles */
+.sidebar{position:fixed;left:0;top:0;width:220px;height:100vh;padding:20px;background:linear-gradient(180deg,#071026,#0b1322);border-right:1px solid var(--border)}
+.sidebar h2{color:var(--text);font-size:16px;margin:0 0 16px}
+.sidebar a{display:block;padding:10px 12px;color:var(--muted);text-decoration:none;border-radius:6px;margin-bottom:8px}
+.sidebar a:hover{background:rgba(255,255,255,0.02);color:var(--text)}
+.main-with-sidebar{padding-left:240px}
+/* Responsive */
+@media (max-width:800px){.sidebar{position:static;width:100%;height:auto}.main-with-sidebar{padding-left:0}}
+/* Tables and lists */
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+/* small adjustments for forms */
+.form-inline{display:flex;gap:12px}
+.form-inline input{flex:1}
+
+/* Dashboard specific */
+.container{max-width:1200px;margin:24px auto;padding:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:18px}
+.stat-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+.stat-card h5{margin:0;color:var(--muted);font-size:13px}
+.stat-card h2{margin:8px 0 0;font-size:22px}
+
+.panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 18px rgba(2,6,23,0.45)}
+
+.btn {display:inline-block;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);text-decoration:none}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.info{background:#0ea5a4;color:#fff}
+.btn.secondary{background:rgba(255,255,255,0.03);color:var(--text)}
+
+@media (max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}}

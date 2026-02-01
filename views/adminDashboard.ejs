@@ -1,0 +1,39 @@
+<%- include('navigation') %>
+
+<div class="main-with-sidebar">
+  <div class="container">
+    <h1>Dashboard</h1>
+    <p style="color:var(--muted);margin-top:6px">System overview & control center</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h5>Departments</h5>
+        <h2><%= stats.totalDepartments %></h2>
+      </div>
+      <div class="stat-card">
+        <h5>Total Users</h5>
+        <h2><%= stats.totalUsers %></h2>
+      </div>
+      <div class="stat-card">
+        <h5>Assignments</h5>
+        <h2><%= stats.totalAssignments %></h2>
+      </div>
+      <div class="stat-card">
+        <h5>Pending Reviews</h5>
+        <h2><%= stats.pendingReviews %></h2>
+      </div>
+    </div>
+
+    <div style="display:block;gap:18px;align-items:start">
+      <div class="panel" style="max-width:920px;">
+        <h4 style="margin-top:0">Users by Role</h4>
+        <table class="table" style="margin-top:12px">
+          <tr><td>Admins</td><td><strong><%= stats.usersByRole.Admin %></strong></td></tr>
+          <tr><td>Students</td><td><strong><%= stats.usersByRole.Student %></strong></td></tr>
+          <tr><td>Professors</td><td><strong><%= stats.usersByRole.Professor %></strong></td></tr>
+          <tr><td>HODs</td><td><strong><%= stats.usersByRole.HOD %></strong></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

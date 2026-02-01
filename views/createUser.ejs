@@ -1,0 +1,79 @@
+<%- include('navigation') %>
+
+<div class="main-with-sidebar">
+  <div class="container">
+    <h1>Add User</h1>
+    <p style="color:var(--muted);margin-top:6px">Create a new user account</p>
+
+    <div class="card" style="max-width:500px;margin-top:24px">
+      <% if (error) { %>
+        <div style="color:#ff6b6b;background:rgba(255,107,107,0.1);padding:12px;border-radius:6px;margin-bottom:16px;font-size:13px">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form method="post" action="/admin/users/create">
+        <div class="form-row">
+          <label>Name</label>
+          <input type="text" name="name" required />
+        </div>
+
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" name="email" required />
+        </div>
+
+        <div class="form-row">
+          <label>Password</label>
+          <input type="password" name="password" required />
+        </div>
+
+        <div class="form-row">
+          <label>Phone</label>
+          <input type="text" name="phone" required />
+        </div>
+
+        <div class="form-row">
+          <label>Role</label>
+          <select name="role" id="roleSelect" required onchange="handleRoleChange()">
+            <option value="">-- Select Role --</option>
+            <option value="Admin">Admin</option>
+            <option value="Student">Student</option>
+            <option value="Professor">Professor</option>
+            <option value="HOD">HOD</option>
+          </select>
+        </div>
+
+        <div class="form-row" id="departmentField" style="display:none">
+          <label>Department</label>
+          <select name="departmentId" id="departmentSelect">
+            <option value="">-- Select Department --</option>
+            <% departments.forEach(dept => { %>
+              <option value="<%= dept._id %>"><%= dept.name %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <button type="submit" class="btn primary" style="margin-top:24px">Add User</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleRoleChange() {
+    const role = document.getElementById('roleSelect').value;
+    const departmentField = document.getElementById('departmentField');
+    const departmentSelect = document.getElementById('departmentSelect');
+    
+    // Show department field for non-Admin roles
+    if (role && role !== 'Admin') {
+      departmentField.style.display = 'block';
+      departmentSelect.required = true;
+    } else {
+      departmentField.style.display = 'none';
+      departmentSelect.required = false;
+      departmentSelect.value = '';
+    }
+  }
+</script>

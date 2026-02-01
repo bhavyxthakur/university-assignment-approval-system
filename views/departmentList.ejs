@@ -1,0 +1,52 @@
+<%- include('navigation') %>
+
+<div class="main-with-sidebar">
+  <div class="container">
+    <h1>Departments</h1>
+
+    <div class="panel" style="margin-top:24px">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Department Name</th>
+            <th>Program Type</th>
+            <th>Users</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% departments.forEach((dept) => { %>
+            <tr>
+              <td><strong><%= dept.name %></strong></td>
+              <td><%= dept.programType %></td>
+              <td>0</td>
+              <td style="display:flex;gap:8px">
+                <a href="/admin/departments/edit/<%= dept._id %>" class="btn secondary" style="font-size:13px;padding:8px 12px">Edit</a>
+                <form 
+                  action="/admin/departments/delete/<%= dept._id %>" 
+                  method="POST"
+                  style="display:inline;"
+                  onsubmit="return confirm('Are you sure you want to delete this department?');"
+                >
+                  <button type="submit" class="btn" style="background:#dc2626;color:white;font-size:13px;padding:8px 12px;border:none">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:12px;align-items:center;justify-content:center;color:var(--muted)">
+      <% if (currentPage > 1) { %>
+        <a href="/admin/departments/list?page=<%= currentPage - 1 %>" class="btn secondary">← Previous</a>
+      <% } %>
+
+      <span>Page <strong><%= currentPage %></strong> of <strong><%= totalPages %></strong></span>
+
+      <% if (currentPage < totalPages) { %>
+        <a href="/admin/departments/list?page=<%= currentPage + 1 %>" class="btn secondary">Next →</a>
+      <% } %>
+    </div>
+  </div>
+</div>

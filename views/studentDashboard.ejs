@@ -1,0 +1,50 @@
+<!-- Student Dashboard View -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('studentNavigation') %>
+    <div class="main-with-sidebar">
+        <h1>Welcome, <%= userName %>!</h1>
+        <h2>Your Assignments</h2>
+        <a href="/student/assignments/create" class="btn">Create New Assignment</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (recentSubmissions && recentSubmissions.length > 0) { %>
+                    <% recentSubmissions.forEach(function(assignment) { %>
+                        <tr>
+                            <td><%= assignment.title %></td>
+                            <td><%= assignment.status %></td>
+                            <td><%= assignment.updatedAt ? assignment.updatedAt.toLocaleString() : '' %></td>
+                            <td>
+                                <a href="/student/assignments/<%= assignment._id %>/details">View</a>
+                                <% if (assignment.status === 'Draft' || assignment.status === 'Rejected') { %>
+                                    | <a href="/student/assignments/<%= assignment._id %>/edit">Edit</a>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr><td colspan="4">No assignments found.</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        <!-- <form action="/logout" method="get">
+            <button type="submit" class="btn btn-logout">Logout</button>
+        </form> -->
+    </div>
+</body>
+</html>

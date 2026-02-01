@@ -1,0 +1,43 @@
+<%- include('navigation') %>
+
+<div class="main-with-sidebar">
+  <div class="container">
+    <h1>Edit Department</h1>
+    <p style="color:var(--muted);margin-top:6px">Update department information</p>
+
+    <div class="card" style="max-width:500px;margin-top:24px">
+      <form action="/admin/departments/edit/<%= dept._id %>" method="POST">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div style="color:#ff6b6b;background:rgba(255,107,107,0.1);padding:10px;border-radius:6px;margin-bottom:12px;font-size:13px">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <div class="form-row">
+          <label>Department Name</label>
+          <input type="text" name="name" value="<%= dept.name %>" required />
+        </div>
+
+        <div class="form-row">
+          <label>Program Type</label>
+          <select name="programType" required>
+            <option value="">-- Select Program Type --</option>
+            <option value="UG" <%= dept.programType === "UG" ? "selected" : "" %>>UG</option>
+            <option value="PG" <%= dept.programType === "PG" ? "selected" : "" %>>PG</option>
+            <option value="Research" <%= dept.programType === "Research" ? "selected" : "" %>>Research</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label>Address</label>
+          <textarea name="address" required style="resize:vertical;min-height:80px"><%= dept.address %></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button type="submit" class="btn primary">Save Changes</button>
+          <a href="/admin/departments/list" class="btn secondary" style="text-align:center;flex:1">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

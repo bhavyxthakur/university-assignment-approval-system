@@ -6,7 +6,6 @@ This project is actively under development.
 
 ### Completed
 - Admin module (departments, users, RBAC, constraints)
-- Student module (assignment drafts, uploads, submission, resubmission)
 - Core workflow state machine
 - Immutable audit logging
 - Notification system (in-app + email hooks)

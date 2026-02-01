@@ -461,48 +461,6 @@ State machine enforced in controller logic:
 
 ---
 
-## 🔍 Audit Trail Example
-
-**Assignment ID: 507f1f77bcf86cd799439011**
-
-```
-History Entries (Immutable):
-
-1. Actor: Student (ID: ...) | 2024-01-15 09:00:00
-   Action: create
-   Status: null → Draft
-   
-2. Actor: Student (ID: ...) | 2024-01-15 09:15:00
-   Action: submit
-   Status: Draft → Submitted
-   Reviewer: Prof. Smith
-   Notification: Sent to Prof. Smith
-   
-3. Actor: Prof. Smith (ID: ...) | 2024-01-15 14:30:00
-   Action: reject
-   Status: Submitted → Rejected
-   Remarks: "Please clarify methodology in section 2"
-   Signature: hash(otp)
-   Notification: Sent to Student
-   
-4. Actor: Student (ID: ...) | 2024-01-16 10:00:00
-   Action: resubmit
-   Status: Rejected → Submitted
-   Remarks: "Resubmitted with new file"
-   Notification: Sent to Prof. Smith
-   
-5. Actor: Prof. Smith (ID: ...) | 2024-01-16 15:00:00
-   Action: approve
-   Status: Submitted → Approved
-   Remarks: "Excellent work"
-   Signature: hash(otp)
-   Notification: Sent to Student
-```
-
-**Complete chain of custody. Immutable. Non-repudiable.**
-
----
-
 ## 🧪 Testing Workflows
 
 ### Admin Workflow
@@ -564,40 +522,3 @@ npm start      # Production
 
 ---
 
-## 🎯 Interview Value
-
-This system demonstrates:
-
-✅ **Real RBAC**: Server-side role enforcement, middleware protection, immutable roles
-✅ **Workflow Modeling**: State machines, valid transitions, prevent invalid states
-✅ **Audit Logging**: Immutable history, cannot rewrite, append-only
-✅ **Constraint-Aware Deletion**: Dependency checks, prevent orphaned data
-✅ **Non-Repudiation**: OTP verification for critical actions (approvals)
-✅ **Ownership Verification**: Every resource access checks user identity
-✅ **Professional Architecture**: Separation of concerns (models/controllers/routes/middleware)
-✅ **Real-World Thinking**: Handles dependencies, state, authority, accountability
-
----
-
-## 📝 Future Enhancements
-
-1. **Batch Operations**: Bulk user creation from CSV
-2. **Advanced Filtering**: Department-wise dashboards
-3. **Analytics**: Approval rates, review times, bottleneck detection
-4. **API Layer**: REST API with JWT (separate from web app)
-5. **Cloud Storage**: S3 integration for file uploads
-6. **Automated Escalation**: Reminder emails for pending reviews
-7. **Compliance Reports**: GDPR/audit export functionality
-8. **Dashboard Widgets**: Charts, trend analysis
-9. **Role-Based Views**: Dynamic UI based on permissions
-10. **Database Backups**: Automated audit trail backups
-
----
-
-## 📞 Support
-
-For questions about the architecture or implementation, refer to this README and the inline code comments throughout the project.
-
----
-
-**Built with discipline. No shortcuts. Ready for production.**

@@ -3,9 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Assignments</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Assignment List</h1>
+    <%- include('studentNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1>My Assignments</h1>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                <a href="/student/assignments/create" class="btn primary">+ Create New</a>
+
+                <form method="GET" style="display: flex; gap: 8px;">
+                    <select name="status" onchange="this.form.submit()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                        <option value="">All Statuses</option>
+                        <% statusOptions.forEach(function(status) { %>
+                            <option value="<%= status %>" <%= filterStatus === status ? 'selected' : '' %>><%= status %></option>
+                        <% }) %>
+                    </select>
+
+                    <select name="sort" onchange="this.form.submit()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                        <option value="submittedAt" <%= (!sort || sort === 'submittedAt') ? 'selected' : '' %>>Sort by Date</option>
+                        <option value="title" <%= sort === 'title' ? 'selected' : '' %>>Sort by Title</option>
+                        <option value="status" <%= sort === 'status' ? 'selected' : '' %>>Sort by Status</option>
+                    </select>
+                </form>
+            </div>
+
+            <% if (assignments && assignments.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Reviewer</th>
+                            <th>Submitted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% assignments.forEach(function(assignment) { %>
+                            <tr>
+                                <td><%= assignment.title %></td>
+                                <td><%= assignment.category %></td>
+                                <td>
+                                    <span class="badge badge-<%= assignment.status.toLowerCase() %>">
+                                        <%= assignment.status %>
+                                    </span>
+                                </td>
+                                <td><%= assignment.reviewerId ? assignment.reviewerId.name : '-' %></td>
+                                <td><%= assignment.submittedAt ? assignment.submittedAt.toLocaleString() : '-' %></td>
+                                <td>
+                                    <a href="/student/assignments/<%= assignment._id %>/details" class="btn secondary">View</a>
+
+                                    <% if (assignment.status === 'Draft') { %>
+                                        <a href="/student/assignments/<%= assignment._id %>/submit" class="btn primary">Submit</a>
+                                    <% } else if (assignment.status === 'Rejected') { %>
+                                        <a href="/student/assignments/<%= assignment._id %>/resubmit" class="btn info">Resubmit</a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <div class="card">
+                    <p style="color: var(--muted); text-align: center;">
+                        <% if (filterStatus) { %>
+                            No assignments found with status "<%= filterStatus %>".
+                        <% } else { %>
+                            No assignments yet. <a href="/student/assignments/create" style="color: var(--accent);">Create your first assignment</a>
+                        <% } %>
+                    </p>
+                </div>
+            <% } %>
+
+            <div style="margin-top: 20px;">
+                <a href="/student/dashboard" class="btn secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

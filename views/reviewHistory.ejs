@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review History</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('professorNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1>Review History</h1>
+
+            <% if (reviewed && reviewed.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Assignment</th>
+                            <th>Student</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Reviewed Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reviewed.forEach(function(assignment) { %>
+                            <tr>
+                                <td><%= assignment.title %></td>
+                                <td><%= assignment.studentId.name %></td>
+                                <td><%= assignment.category %></td>
+                                <td>
+                                    <span class="badge badge-<%= assignment.status.toLowerCase() %>">
+                                        <%= assignment.status %>
+                                    </span>
+                                </td>
+                                <td><%= assignment.updatedAt ? assignment.updatedAt.toLocaleString() : '-' %></td>
+                                <td>
+                                    <a href="/professor/assignments/<%= assignment._id %>/review" class="btn secondary">View</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <div class="card">
+                    <p style="color: var(--muted); text-align: center;">No reviews completed yet.</p>
+                </div>
+            <% } %>
+
+            <div style="margin-top: 20px;">
+                <a href="/professor/dashboard" class="btn secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

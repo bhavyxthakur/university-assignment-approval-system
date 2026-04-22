@@ -4,32 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Login</title>
-
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-
 <body>
+    <div class="container-center">
+        <div class="card">
+            <h2>User Login</h2>
+            <p style="color: var(--muted); margin-bottom: 16px;">Student, Professor, or HOD</p>
 
+            <% if (error) { %>
+                <div class="alert alert-error"><%= error %></div>
+            <% } %>
 
-<div class="container">
-    <h2>User Login</h2>
+            <form method="post" action="/user/login">
+                <div class="form-row">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" required autocomplete="email">
+                </div>
 
-    <p class="error"><%= error %></p>
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" required autocomplete="current-password">
+                </div>
 
-    <form method="post" action="/user/login">
-        <div class="form-row">
-            <label for="email">Email</label>
-            <input id="email" type="email" name="email" required>
+                <button class="primary" type="submit" style="width: 100%; margin-top: 18px;">Login</button>
+            </form>
+
+            <div style="margin-top: 16px; text-align: center;">
+                <a href="/" class="link">Admin Login</a>
+            </div>
         </div>
-
-        <div class="form-row">
-            <label for="password">Password</label>
-            <input id="password" type="password" name="password" required>
-        </div>
-
-        <button class="primary" type="submit">Login</button>
-    </form>
-    </div>
     </div>
 </body>
 </html>

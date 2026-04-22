@@ -3,9 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Submit Assignment</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Submit Assignment</h1>
+    <%- include('studentNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1>Submit Assignment</h1>
+
+            <% if (error) { %>
+                <div class="alert alert-error"><%= error %></div>
+            <% } %>
+
+            <div class="card" style="margin-bottom: 20px;">
+                <h2><%= assignment.title %></h2>
+                <p style="color: var(--muted); margin-bottom: 16px;"><%= assignment.description %></p>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <div>
+                        <label>Category</label>
+                        <p><%= assignment.category %></p>
+                    </div>
+                    <div>
+                        <label>Files Uploaded</label>
+                        <p><%= assignment.files.length %> file(s)</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <label>Uploaded Files</label>
+                    <% if (assignment.files && assignment.files.length > 0) { %>
+                        <ul style="list-style: none; padding: 0;">
+                            <% assignment.files.forEach(function(file) { %>
+                                <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                    <span><%= file.originalName %></span> (v<%= file.version %>, <%= (file.fileSize / 1024).toFixed(2) %> KB)
+                                    <a href="/student/assignments/<%= assignment._id %>/files/<%= file._id %>/download" class="btn secondary" style="margin-left: 10px;">Download</a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p style="color: var(--muted);">No files uploaded yet. Please upload a file first.</p>
+                        <a href="/student/assignments/<%= assignment._id %>/details" class="btn primary" style="margin-top: 8px;">Go to Details to Upload</a>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Select Reviewer</h3>
+                <p style="color: var(--muted); margin-bottom: 16px;">Choose a professor or HOD from your department to review your assignment.</p>
+
+                <% if (reviewers && reviewers.length > 0) { %>
+                    <form action="/student/assignments/<%= assignment._id %>/submit" method="POST">
+                        <div class="form-row">
+                            <label for="reviewerId">Select Reviewer *</label>
+                            <select id="reviewerId" name="reviewerId" required>
+                                <option value="">Choose a reviewer</option>
+                                <% reviewers.forEach(function(reviewer) { %>
+                                    <option value="<%= reviewer._id %>"><%= reviewer.name %> (<%= reviewer.role %>)</option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-row" style="margin-top: 20px;">
+                            <button type="submit" class="btn primary" style="width: 100%">Submit for Review</button>
+                        </div>
+                    </form>
+                <% } else { %>
+                    <div class="alert alert-error">
+                        No reviewers available in your department. Please contact the admin.
+                    </div>
+                <% } %>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="/student/assignments/<%= assignment._id %>/details" class="btn secondary">Back to Details</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -412,6 +412,32 @@ module.exports.reviewHistory = async (req, res) => {
     }
 };
 
+module.exports.downloadFile = async (req, res) => {
+    try {
+        const { assignmentId, fileId } = req.params;
+        const userId = req.session.userId;
+
+        const assignment = await assignmentModel.findById(assignmentId);
+
+        // Verify access: assigned reviewer
+        if (!assignment.reviewerId || assignment.reviewerId.toString() !== userId.toString()) {
+            return res.status(403).json({ error: "Not authorized" });
+        }
+
+        // Find file
+        const file = assignment.files.find(f => f._id.toString() === fileId);
+        if (!file) {
+            return res.status(404).json({ error: "File not found" });
+        }
+
+        // Send file
+        res.download(file.storagePath, file.originalName);
+    } catch (err) {
+        console.error("File download error:", err);
+        res.status(500).json({ error: "Error downloading file" });
+    }
+};
+
 module.exports.markNotificationAsRead = async (req, res) => {
     try {
         const { notificationId } = req.params;

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Professor Dashboard</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <%- include('studentNavigation') %>
+    <%- include('professorNavigation') %>
     <div class="main-with-sidebar">
         <div class="container">
             <h1>Dashboard</h1>
@@ -15,57 +15,48 @@
 
             <div class="stats-grid" style="margin-top: 20px;">
                 <div class="stat-card">
-                    <h5>Draft</h5>
-                    <h2><%= statusCounts.Draft || 0 %></h2>
+                    <h5>Pending Reviews</h5>
+                    <h2><%= stats.pendingCount || 0 %></h2>
                 </div>
                 <div class="stat-card">
-                    <h5>Submitted</h5>
-                    <h2><%= statusCounts.Submitted || 0 %></h2>
-                </div>
-                <div class="stat-card">
-                    <h5>Approved</h5>
-                    <h2><%= statusCounts.Approved || 0 %></h2>
-                </div>
-                <div class="stat-card">
-                    <h5>Rejected</h5>
-                    <h2><%= statusCounts.Rejected || 0 %></h2>
-                </div>
-                <div class="stat-card">
-                    <h5>Forwarded</h5>
-                    <h2><%= statusCounts.Forwarded || 0 %></h2>
+                    <h5>Total Reviewed</h5>
+                    <h2><%= stats.totalReviewed || 0 %></h2>
                 </div>
             </div>
 
-            <h2 style="margin-top: 24px;">Recent Submissions</h2>
-            <% if (recentSubmissions && recentSubmissions.length > 0) { %>
+            <h2 style="margin-top: 24px;">Pending Reviews</h2>
+            <% if (pendingReviews && pendingReviews.length > 0) { %>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Title</th>
+                            <th>Assignment</th>
+                            <th>Student</th>
+                            <th>Category</th>
                             <th>Status</th>
-                            <th>Reviewer</th>
-                            <th>Submitted</th>
+                            <th>Days Pending</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% recentSubmissions.forEach(function(assignment) { %>
+                        <% pendingReviews.forEach(function(assignment) { %>
                             <tr>
                                 <td><%= assignment.title %></td>
+                                <td><%= assignment.studentId ? assignment.studentId.name : '-' %></td>
+                                <td><%= assignment.category %></td>
                                 <td>
                                     <span class="badge badge-<%= assignment.status.toLowerCase() %>">
                                         <%= assignment.status %>
                                     </span>
                                 </td>
-                                <td><%= assignment.reviewerId ? assignment.reviewerId.name : '-' %></td>
-                                <td><%= assignment.submittedAt ? assignment.submittedAt.toLocaleString() : '-' %></td>
                                 <td>
-                                    <a href="/student/assignments/<%= assignment._id %>/details" class="btn secondary">View</a>
-                                    <% if (assignment.status === 'Rejected') { %>
-                                        <a href="/student/assignments/<%= assignment._id %>/resubmit" class="btn info">Resubmit</a>
-                                    <% } else if (assignment.status === 'Draft') { %>
-                                        <a href="/student/assignments/<%= assignment._id %>/submit" class="btn primary">Submit</a>
+                                    <% if (assignment.daysPending > 7) { %>
+                                        <span style="color: #ef4444;"><%= assignment.daysPending %> days</span>
+                                    <% } else { %>
+                                        <%= assignment.daysPending %> days
                                     <% } %>
+                                </td>
+                                <td>
+                                    <a href="/professor/assignments/<%= assignment._id %>/review" class="btn primary">Review</a>
                                 </td>
                             </tr>
                         <% }) %>
@@ -73,7 +64,7 @@
                 </table>
             <% } else { %>
                 <div class="card">
-                    <p style="color: var(--muted); text-align: center;">No assignments yet. <a href="/student/assignments/create" style="color: var(--accent);">Create your first assignment</a></p>
+                    <p style="color: var(--muted); text-align: center;">No pending reviews. Great job!</p>
                 </div>
             <% } %>
 

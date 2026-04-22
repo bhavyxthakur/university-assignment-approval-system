@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Assignment</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('professorNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1>Review Assignment</h1>
+
+            <div class="card" style="margin-bottom: 20px;">
+                <h2><%= assignment.title %></h2>
+                <p style="color: var(--muted); margin-bottom: 16px;"><%= assignment.description %></p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div>
+                        <label>Student</label>
+                        <p><%= assignment.studentId.name %></p>
+                    </div>
+                    <div>
+                        <label>Email</label>
+                        <p><%= assignment.studentId.email %></p>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <p><span class="badge badge-<%= assignment.status.toLowerCase() %>"><%= assignment.status %></span></p>
+                    </div>
+                    <div>
+                        <label>Category</label>
+                        <p><%= assignment.category %></p>
+                    </div>
+                    <div>
+                        <label>Submitted</label>
+                        <p><%= assignment.submittedAt ? assignment.submittedAt.toLocaleString() : '-' %></p>
+                    </div>
+                    <div>
+                        <label>Days Pending</label>
+                        <p><%= Math.floor((Date.now() - assignment.submittedAt) / (1000 * 60 * 60 * 24)) %> days</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <label>Files</label>
+                    <% if (assignment.files && assignment.files.length > 0) { %>
+                        <ul style="list-style: none; padding: 0;">
+                            <% assignment.files.forEach(function(file) { %>
+                                <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                    <span><%= file.originalName %></span> (v<%= file.version %>, <%= (file.fileSize / 1024).toFixed(2) %> KB)
+                                    <a href="/professor/assignments/<%= assignment._id %>/files/<%= file._id %>/download" class="btn secondary" style="margin-left: 10px;">Download</a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p style="color: var(--muted);">No files uploaded</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <h2>Assignment History</h2>
+            <div class="card" style="margin-bottom: 20px;">
+                <% if (assignment.history && assignment.history.length > 0) { %>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Action</th>
+                                <th>By</th>
+                                <th>Status Change</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% assignment.history.forEach(function(entry) { %>
+                                <tr>
+                                    <td><%= entry.timestamp.toLocaleString() %></td>
+                                    <td><span class="badge"><%= entry.action %></span></td>
+                                    <td><%= entry.actorId ? entry.actorId.name : 'System' %></td>
+                                    <td><%= entry.previousStatus || '-' %> &rarr; <%= entry.newStatus %></td>
+                                    <td><%= entry.remarks || '-' %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p style="color: var(--muted);">No history entries</p>
+                <% } %>
+            </div>
+
+            <div class="card">
+                <h3>Review Actions</h3>
+
+                <!-- Approve Section -->
+                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+                    <h4>Approve Assignment</h4>
+                    <form id="approveForm">
+                        <div class="form-row">
+                            <label for="remarks">Approval Remarks (optional)</label>
+                            <textarea id="remarks" name="remarks" rows="3" placeholder="Any comments for the student"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="signature">Your Signature / Name *</label>
+                            <input type="text" id="signature" name="signature" required placeholder="Enter your full name as signature">
+                        </div>
+
+                        <div class="form-row" style="margin-top: 12px;">
+                            <button type="button" onclick="initiateApproval()" class="btn primary">Approve (OTP Verification Required)</button>
+                        </div>
+                    </form>
+
+                    <div id="otpSection" style="display: none; margin-top: 16px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 8px;">
+                        <h4>Enter OTP</h4>
+                        <p style="color: var(--muted); font-size: 13px;">An OTP has been sent to your email. Valid for 10 minutes.</p>
+                        <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" style="max-width: 200px; margin-top: 8px;">
+                        <button type="button" onclick="verifyOTP()" class="btn info" style="margin-top: 8px;">Verify & Complete Approval</button>
+                    </div>
+                </div>
+
+                <!-- Reject Section -->
+                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+                    <h4>Reject Assignment</h4>
+                    <form id="rejectForm">
+                        <div class="form-row">
+                            <label for="rejectRemarks">Rejection Remarks * (minimum 10 characters)</label>
+                            <textarea id="rejectRemarks" name="rejectRemarks" rows="3" required placeholder="Explain why this assignment is being rejected"></textarea>
+                        </div>
+
+                        <div class="form-row" style="margin-top: 12px;">
+                            <button type="button" onclick="rejectAssignment()" class="btn" style="background: #dc2626; color: white;">Reject Assignment</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Forward Section -->
+                <div>
+                    <h4>Forward to Another Reviewer</h4>
+                    <% if (otherReviewers && otherReviewers.length > 0) { %>
+                        <form id="forwardForm">
+                            <div class="form-row">
+                                <label for="forwardedToId">Select Reviewer *</label>
+                                <select id="forwardedToId" name="forwardedToId" required>
+                                    <option value="">Choose a reviewer</option>
+                                    <% otherReviewers.forEach(function(reviewer) { %>
+                                        <option value="<%= reviewer._id %>"><%= reviewer.name %> (<%= reviewer.role %>)</option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <label for="forwardingNote">Forwarding Note (optional)</label>
+                                <textarea id="forwardingNote" name="forwardingNote" rows="3" placeholder="Add a note for the new reviewer"></textarea>
+                            </div>
+
+                            <div class="form-row" style="margin-top: 12px;">
+                                <button type="button" onclick="forwardAssignment()" class="btn secondary">Forward Assignment</button>
+                            </div>
+                        </form>
+                    <% } else { %>
+                        <p style="color: var(--muted);">No other reviewers available in your department.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="/professor/dashboard" class="btn secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const assignmentId = '<%= assignment._id %>';
+
+        async function initiateApproval() {
+            const remarks = document.getElementById('remarks').value;
+            const signature = document.getElementById('signature').value;
+
+            if (!signature) {
+                alert('Signature is required');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/professor/assignments/${assignmentId}/approve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ remarks, signature })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('otpSection').style.display = 'block';
+                    alert(data.message);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error initiating approval');
+            }
+        }
+
+        async function verifyOTP() {
+            const otp = document.getElementById('otpInput').value;
+
+            if (!otp) {
+                alert('Please enter the OTP');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/professor/assignments/${assignmentId}/verify-approval-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ otp })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Assignment approved successfully!');
+                    window.location.href = '/professor/dashboard';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error verifying OTP');
+            }
+        }
+
+        async function rejectAssignment() {
+            const remarks = document.getElementById('rejectRemarks').value;
+
+            if (!remarks || remarks.trim().length < 10) {
+                alert('Rejection remarks must be at least 10 characters');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to reject this assignment?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/professor/assignments/${assignmentId}/reject`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ remarks })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Assignment rejected');
+                    window.location.href = '/professor/dashboard';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error rejecting assignment');
+            }
+        }
+
+        async function forwardAssignment() {
+            const forwardedToId = document.getElementById('forwardedToId').value;
+            const forwardingNote = document.getElementById('forwardingNote').value;
+
+            if (!forwardedToId) {
+                alert('Please select a reviewer');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to forward this assignment?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/professor/assignments/${assignmentId}/forward`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ forwardedToId, forwardingNote })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Assignment forwarded successfully');
+                    window.location.href = '/professor/dashboard';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error forwarding assignment');
+            }
+        }
+    </script>
+</body>
+</html>

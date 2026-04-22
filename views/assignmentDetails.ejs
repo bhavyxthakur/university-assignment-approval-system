@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('studentNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1><%= assignment.title %></h1>
+
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="form-row">
+                    <label>Status</label>
+                    <span class="badge badge-<%= assignment.status.toLowerCase() %>"><%= assignment.status %></span>
+                </div>
+
+                <div class="form-row">
+                    <label>Category</label>
+                    <span><%= assignment.category %></span>
+                </div>
+
+                <div class="form-row">
+                    <label>Description</label>
+                    <p><%= assignment.description %></p>
+                </div>
+
+                <% if (assignment.reviewerId) { %>
+                <div class="form-row">
+                    <label>Reviewer</label>
+                    <span><%= assignment.reviewerId.name %> (<%= assignment.reviewerId.email %>)</span>
+                </div>
+                <% } %>
+
+                <% if (assignment.submittedAt) { %>
+                <div class="form-row">
+                    <label>Submitted At</label>
+                    <span><%= assignment.submittedAt.toLocaleString() %></span>
+                </div>
+                <% } %>
+
+                <div class="form-row">
+                    <label>Files</label>
+                    <% if (assignment.files && assignment.files.length > 0) { %>
+                        <ul style="list-style: none; padding: 0;">
+                            <% assignment.files.forEach(function(file) { %>
+                                <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                    <span><%= file.originalName %></span> (v<%= file.version %>, <%= (file.fileSize / 1024).toFixed(2) %> KB)
+                                    <a href="/student/assignments/<%= assignment._id %>/files/<%= file._id %>/download" class="btn secondary" style="margin-left: 10px;">Download</a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p style="color: var(--muted);">No files uploaded</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <h2>History</h2>
+            <div class="card">
+                <% if (assignment.history && assignment.history.length > 0) { %>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Action</th>
+                                <th>By</th>
+                                <th>Status Change</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% assignment.history.forEach(function(entry) { %>
+                                <tr>
+                                    <td><%= entry.timestamp.toLocaleString() %></td>
+                                    <td><span class="badge"><%= entry.action %></span></td>
+                                    <td><%= entry.actorId ? entry.actorId.name : 'System' %></td>
+                                    <td><%= entry.previousStatus || '-' %> &rarr; <%= entry.newStatus %></td>
+                                    <td><%= entry.remarks || '-' %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p style="color: var(--muted);">No history entries</p>
+                <% } %>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="/student/dashboard" class="btn secondary">Back to Dashboard</a>
+
+                <% if (assignment.status === 'Draft') { %>
+                    <a href="/student/assignments/<%= assignment._id %>/submit" class="btn primary">Submit for Review</a>
+                <% } else if (assignment.status === 'Rejected') { %>
+                    <a href="/student/assignments/<%= assignment._id %>/resubmit" class="btn primary">Resubmit</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

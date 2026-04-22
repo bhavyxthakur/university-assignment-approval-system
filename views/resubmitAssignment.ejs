@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resubmit Assignment</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('studentNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1>Resubmit Assignment</h1>
+
+            <div class="card" style="margin-bottom: 20px;">
+                <h3><%= assignment.title %></h3>
+                <p style="color: var(--muted);"><%= assignment.description %></p>
+            </div>
+
+            <% if (error) { %>
+                <div class="alert alert-error"><%= error %></div>
+            <% } %>
+
+            <form action="/student/assignments/<%= assignment._id %>/resubmit" method="POST" enctype="multipart/form-data" class="card">
+                <div class="form-row">
+                    <label for="description">Update Description (optional)</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Updated description"><%= assignment.description %></textarea>
+                </div>
+
+                <div class="form-row">
+                    <label for="file">Upload New File (PDF, max 10MB)</label>
+                    <input type="file" id="file" name="file" accept="application/pdf">
+                </div>
+
+                <div class="form-row">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="keepOriginal" value="true" id="keepOriginal">
+                        Keep original file(s) along with new upload
+                    </label>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <button type="submit" class="btn primary" style="width: 100%">Resubmit Assignment</button>
+                </div>
+            </form>
+
+            <div style="margin-top: 20px;">
+                <a href="/student/assignments/<%= assignment._id %>/details" class="btn secondary">Cancel</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

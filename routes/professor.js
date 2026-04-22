@@ -13,6 +13,9 @@ professorRoute.get("/dashboard", professorController.reviewerDashboard);
 // Review workflow
 professorRoute.get("/assignments/:assignmentId/review", professorController.reviewAssignmentGet);
 
+// File download
+professorRoute.get("/assignments/:assignmentId/files/:fileId/download", professorController.downloadFile);
+
 // Approval
 professorRoute.post("/assignments/:assignmentId/approve", professorController.approveAssignmentPost);
 professorRoute.post("/assignments/:assignmentId/verify-approval-otp", professorController.verifyApprovalOTP);

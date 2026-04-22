@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Assignment</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('studentNavigation') %>
+    <div class="main-with-sidebar">
+        <div class="container">
+            <h1>Create New Assignment</h1>
+
+            <% if (error && error.includes('successfully')) { %>
+                <div class="alert alert-success"><%= error %></div>
+                <div style="margin-top: 16px;">
+                    <a href="/student/assignments" class="btn secondary">View All Assignments</a>
+                    <a href="/student/assignments/<%= typeof assignmentId !== 'undefined' ? assignmentId : '' %>/submit" class="btn primary">Upload File & Submit</a>
+                </div>
+            <% } else if (error) { %>
+                <div class="alert alert-error"><%= error %></div>
+            <% } %>
+
+            <form action="/student/assignments/create" method="POST" class="card">
+                <div class="form-row">
+                    <label for="title">Title *</label>
+                    <input type="text" id="title" name="title" required placeholder="Enter assignment title">
+                </div>
+
+                <div class="form-row">
+                    <label for="description">Description *</label>
+                    <textarea id="description" name="description" rows="5" required placeholder="Describe your assignment"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select category</option>
+                        <option value="Assignment">Assignment</option>
+                        <option value="Thesis">Thesis</option>
+                        <option value="Report">Report</option>
+                    </select>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <button type="submit" class="btn primary" style="width: 100%">Create Assignment (Draft)</button>
+                </div>
+            </form>
+
+            <div style="margin-top: 20px;">
+                <a href="/student/dashboard" class="btn secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

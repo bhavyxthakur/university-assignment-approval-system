@@ -12,7 +12,6 @@
         <div class="container">
             <h1>Dashboard</h1>
             <p style="color:var(--muted);margin-top:6px">Welcome, <%= userName %></p>
-
             <div class="stats-grid" style="margin-top: 20px;">
                 <div class="stat-card">
                     <h5>Pending Reviews</h5>
@@ -23,7 +22,6 @@
                     <h2><%= stats.totalReviewed || 0 %></h2>
                 </div>
             </div>
-
             <h2 style="margin-top: 24px;">Pending Reviews</h2>
             <% if (pendingReviews && pendingReviews.length > 0) { %>
                 <table class="table">
@@ -67,7 +65,6 @@
                     <p style="color: var(--muted); text-align: center;">No pending reviews. Great job!</p>
                 </div>
             <% } %>
-
             <% if (notifications && notifications.length > 0) { %>
                 <h2 style="margin-top: 24px;">Notifications</h2>
                 <div class="card">

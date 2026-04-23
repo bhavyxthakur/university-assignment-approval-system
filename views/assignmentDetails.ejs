@@ -11,37 +11,31 @@
     <div class="main-with-sidebar">
         <div class="container">
             <h1><%= assignment.title %></h1>
-
             <div class="card" style="margin-bottom: 20px;">
                 <div class="form-row">
                     <label>Status</label>
                     <span class="badge badge-<%= assignment.status.toLowerCase() %>"><%= assignment.status %></span>
                 </div>
-
                 <div class="form-row">
                     <label>Category</label>
                     <span><%= assignment.category %></span>
                 </div>
-
                 <div class="form-row">
                     <label>Description</label>
                     <p><%= assignment.description %></p>
                 </div>
-
                 <% if (assignment.reviewerId) { %>
                 <div class="form-row">
                     <label>Reviewer</label>
                     <span><%= assignment.reviewerId.name %> (<%= assignment.reviewerId.email %>)</span>
                 </div>
                 <% } %>
-
                 <% if (assignment.submittedAt) { %>
                 <div class="form-row">
                     <label>Submitted At</label>
                     <span><%= assignment.submittedAt.toLocaleString() %></span>
                 </div>
                 <% } %>
-
                 <div class="form-row">
                     <label>Files</label>
                     <% if (assignment.files && assignment.files.length > 0) { %>
@@ -56,9 +50,16 @@
                     <% } else { %>
                         <p style="color: var(--muted);">No files uploaded</p>
                     <% } %>
+                    <% if (assignment.status === 'Draft') { %>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+                            <form action="/student/assignments/<%= assignment._id %>/upload" method="POST" enctype="multipart/form-data" class="form-inline">
+                                <input type="file" name="file" accept="application/pdf" required>
+                                <button type="submit" class="btn info">Upload PDF</button>
+                            </form>
+                        </div>
+                    <% } %>
                 </div>
             </div>
-
             <h2>History</h2>
             <div class="card">
                 <% if (assignment.history && assignment.history.length > 0) { %>
@@ -88,10 +89,8 @@
                     <p style="color: var(--muted);">No history entries</p>
                 <% } %>
             </div>
-
             <div style="margin-top: 20px;">
                 <a href="/student/dashboard" class="btn secondary">Back to Dashboard</a>
-
                 <% if (assignment.status === 'Draft') { %>
                     <a href="/student/assignments/<%= assignment._id %>/submit" class="btn primary">Submit for Review</a>
                 <% } else if (assignment.status === 'Rejected') { %>

@@ -11,15 +11,12 @@
     <div class="main-with-sidebar">
         <div class="container">
             <h1>Submit Assignment</h1>
-
             <% if (error) { %>
                 <div class="alert alert-error"><%= error %></div>
             <% } %>
-
             <div class="card" style="margin-bottom: 20px;">
                 <h2><%= assignment.title %></h2>
                 <p style="color: var(--muted); margin-bottom: 16px;"><%= assignment.description %></p>
-
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
                     <div>
                         <label>Category</label>
@@ -30,7 +27,6 @@
                         <p><%= assignment.files.length %> file(s)</p>
                     </div>
                 </div>
-
                 <div style="margin-top: 16px;">
                     <label>Uploaded Files</label>
                     <% if (assignment.files && assignment.files.length > 0) { %>
@@ -48,11 +44,9 @@
                     <% } %>
                 </div>
             </div>
-
             <div class="card">
                 <h3>Select Reviewer</h3>
                 <p style="color: var(--muted); margin-bottom: 16px;">Choose a professor or HOD from your department to review your assignment.</p>
-
                 <% if (reviewers && reviewers.length > 0) { %>
                     <form action="/student/assignments/<%= assignment._id %>/submit" method="POST">
                         <div class="form-row">
@@ -64,7 +58,6 @@
                                 <% }) %>
                             </select>
                         </div>
-
                         <div class="form-row" style="margin-top: 20px;">
                             <button type="submit" class="btn primary" style="width: 100%">Submit for Review</button>
                         </div>
@@ -75,7 +68,6 @@
                     </div>
                 <% } %>
             </div>
-
             <div style="margin-top: 20px;">
                 <a href="/student/assignments/<%= assignment._id %>/details" class="btn secondary">Back to Details</a>
             </div>
